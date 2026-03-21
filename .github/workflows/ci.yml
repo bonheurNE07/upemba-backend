@@ -49,6 +49,8 @@ jobs:
           echo "DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres" > .envs/.local/.postgres
           echo "POSTGRES_USER=postgres" >> .envs/.local/.postgres
           echo "POSTGRES_PASSWORD=postgres" >> .envs/.local/.postgres
+          echo "POSTGRES_HOST=postgres" >> .envs/.local/.postgres
+          echo "POSTGRES_PORT=5432" >> .envs/.local/.postgres
           echo "CELERY_BROKER_URL=redis://redis:6379/0" > .envs/.local/.django
           echo "DJANGO_SETTINGS_MODULE=config.settings.test" >> .envs/.local/.django
 
