@@ -26,3 +26,13 @@ def config_loggers(*args, **kwargs):
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
+
+
+@app.on_after_finalize.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Execute the ML predictive maintenance evaluation every 10 minutes
+    sender.add_periodic_task(
+        600.0,
+        app.signature("evaluate_equipment_health_task"),
+        name="Predictive Maintenance Evaluation every 10M",
+    )
