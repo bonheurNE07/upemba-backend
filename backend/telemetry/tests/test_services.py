@@ -8,7 +8,8 @@ from backend.users.models import User
 
 @pytest.mark.django_db
 def test_alert_service_dispatch(user, settings):
-    settings.EMAIL_HOST = "smtp.mock.local"
+    settings.EMAIL_HOST_USER = "mock"
+    settings.EMAIL_HOST_PASSWORD = "mock"
     user.role = User.Role.TECHNICIAN
     user.save()
 
