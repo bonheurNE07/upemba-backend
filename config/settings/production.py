@@ -46,7 +46,9 @@ if SECURE_SSL_REDIRECT:
     SESSION_COOKIE_NAME = "__Secure-sessionid"
     CSRF_COOKIE_NAME = "__Secure-csrftoken"
 
-CSRF_TRUSTED_ORIGINS = [f"http://{host}" for host in ALLOWED_HOSTS] + [f"https://{host}" for host in ALLOWED_HOSTS]
+CSRF_TRUSTED_ORIGINS = [f"http://{host}" for host in ALLOWED_HOSTS] + [
+    f"https://{host}" for host in ALLOWED_HOSTS
+]
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
