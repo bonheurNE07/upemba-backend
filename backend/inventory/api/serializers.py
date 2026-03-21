@@ -7,7 +7,16 @@ from backend.inventory.models import MaintenanceLog
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
-        fields = ["id", "name", "equipment_type", "mac_address", "location_notes", "is_active", "created_at", "updated_at"]
+        fields = [
+            "id",
+            "name",
+            "equipment_type",
+            "mac_address",
+            "location_notes",
+            "is_active",
+            "created_at",
+            "updated_at",
+        ]
         read_only_fields = ["id", "created_at", "updated_at"]
 
 
@@ -16,5 +25,13 @@ class MaintenanceLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MaintenanceLog
-        fields = ["id", "equipment", "author", "author_name", "description", "action_taken", "timestamp"]
+        fields = [
+            "id",
+            "equipment",
+            "author",
+            "author_name",
+            "description",
+            "action_taken",
+            "timestamp",
+        ]
         read_only_fields = ["id", "timestamp", "author_name"]
