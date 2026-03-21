@@ -3,6 +3,7 @@ from celery import shared_task
 from backend.inventory.models import Equipment
 from backend.telemetry.models import HealthStatus
 from backend.telemetry.models import SensorReading
+from backend.telemetry.services.alert_service import AlertService
 from backend.telemetry.services.ml_service import AnomalyDetector
 
 
@@ -13,9 +14,7 @@ def evaluate_equipment_health_task():
 
     for eq in equipments:
         # Fetch the most recent 100 readings (ordered chronologically oldest to newest for the model)
-        recent_qs = SensorReading.objects.filter(equipment=eq).order_by("-timestamp")[
-            :100
-        ]
+        recent_qs = SensorReading.objects.filter(equipment=eq).order_by("-timestamp")[:100]
         # Query evaluation & reverse for chronological order
         recent_list = list(recent_qs.values(*detector.features, "timestamp"))[::-1]
 
@@ -29,6 +28,9 @@ def evaluate_equipment_health_task():
         # Highly negative is CRITICAL, moderately negative is WARNING, positive is NORMAL
         if score < -0.15:
             status = HealthStatus.Status.CRITICAL
+            latest_timestamp = recent_list[-1]["timestamp"]
+            # Trigger our Alert Service immediately to warn Park Rangers!
+            AlertService.trigger_critical_alert(eq.name, score, latest_timestamp)
         elif is_anomaly or score < 0.0:
             status = HealthStatus.Status.WARNING
         else:
