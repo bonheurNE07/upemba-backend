@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from factory import Faker
+from factory import Faker, Iterator
 from factory import post_generation
 from factory.django import DjangoModelFactory
 
@@ -11,6 +11,7 @@ class UserFactory(DjangoModelFactory[User]):
     username = Faker("user_name")
     email = Faker("email")
     name = Faker("name")
+    role = Iterator([User.Role.ADMIN, User.Role.TECHNICIAN, User.Role.RANGER])
 
     @post_generation
     def password(self: User, create: bool, extracted: str | None, **kwargs):  # noqa: FBT001
