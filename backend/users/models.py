@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.db.models import CharField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -10,6 +11,18 @@ class User(AbstractUser):
     If adding fields that need to be filled at user signup,
     check forms.SignupForm and forms.SocialSignupForms accordingly.
     """
+
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Administrator"
+        TECHNICIAN = "TECHNICIAN", "Field Technician"
+        RANGER = "RANGER", "Park Ranger"
+
+    role = CharField(
+        _("User Role"),
+        max_length=20,
+        choices=Role.choices,
+        default=Role.RANGER,
+    )
 
     # First and last name do not cover name patterns around the globe
     name = CharField(_("Name of User"), blank=True, max_length=255)

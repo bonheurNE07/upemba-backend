@@ -38,11 +38,24 @@ class AlertService:
         }
         html_message = render_to_string("telemetry/email/critical_alert.html", context)
 
-        # Default to ADMINS if available
-        recipient_list = [admin[1] for admin in settings.ADMINS]
+        from backend.users.models import User
+
+        # Fetch explicitly authorized personnel
+        recipients = User.objects.filter(
+            role__in=[User.Role.ADMIN, User.Role.TECHNICIAN],
+            is_active=True,
+            email__isnull=False,
+        ).exclude(email="").values_list("email", flat=True)
+
+        recipient_list = list(recipients)
+
+        # Fallback to hardcoded admins if database users aren't seeded yet
         if not recipient_list:
-            logger.warning("No ADMINS configured to receive critical alerts.")
-            return
+            logger.warning("No Technicians/Admins found in DB. Falling back to settings.ADMINS.")
+            recipient_list = [admin[1] for admin in settings.ADMINS]
+            if not recipient_list:
+                logger.warning("No recipients available for critical alerts.")
+                return
 
         try:
             send_mail(
