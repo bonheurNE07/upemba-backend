@@ -1,8 +1,10 @@
 from rest_framework import viewsets
 
-from backend.telemetry.models import HealthStatus, SensorReading
+from backend.telemetry.models import HealthStatus
+from backend.telemetry.models import SensorReading
 
-from .serializers import HealthStatusSerializer, SensorReadingSerializer
+from .serializers import HealthStatusSerializer
+from .serializers import SensorReadingSerializer
 
 
 class HealthStatusViewSet(viewsets.ReadOnlyModelViewSet):
