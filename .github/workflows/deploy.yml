@@ -1,0 +1,31 @@
+name: Edge Deployment
+
+# Only trigger this deployment workflow when the CI pipeline successfully passes on the main branch
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Raspberry Pi Automated Deployment
+    # This explicitly binds the job to only execute on your Raspberry Pi!
+    runs-on: self-hosted
+
+    # Only execute deployment if the upstream CI pipeline (Ruff/Pytest) succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Rebuild and Deploy Docker Compose Stack
+        run: |
+          docker compose -f docker-compose.production.yml down
+          docker compose -f docker-compose.production.yml up -d --build
+
+      - name: Prune Idle Architecture
+        run: docker system prune -f
