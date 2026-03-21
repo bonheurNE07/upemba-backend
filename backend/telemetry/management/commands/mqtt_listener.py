@@ -10,6 +10,7 @@ from backend.telemetry.models import SensorReading
 
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
     help = "Starts a long-running process that listens to the Mosquitto MQTT broker for ESP32 telemetry."
 
@@ -57,10 +58,14 @@ class Command(BaseCommand):
                 vib_z=vib_z,
             )
             # Use basic print since the command loops forever natively
-            self.stdout.write(self.style.SUCCESS(f"Saved reading for {device_id}: Temp {temp}, Volt {volt}"))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Saved reading for {device_id}: Temp {temp}, Volt {volt}"
+                )
+            )
 
         except json.JSONDecodeError:
-            logger.error(f"Malformed JSON payload: {payload}")
+            logger.exception(f"Malformed JSON payload: {payload}")
         except Exception as e:
             logger.exception(f"Error processing MQTT message: {e}")
 
