@@ -1,8 +1,9 @@
 import factory
 from factory.django import DjangoModelFactory
 
-from backend.telemetry.models import SensorReading, HealthStatus
 from backend.inventory.tests.factories import EquipmentFactory
+from backend.telemetry.models import HealthStatus
+from backend.telemetry.models import SensorReading
 
 
 class SensorReadingFactory(DjangoModelFactory[SensorReading]):
@@ -20,7 +21,11 @@ class SensorReadingFactory(DjangoModelFactory[SensorReading]):
 class HealthStatusFactory(DjangoModelFactory[HealthStatus]):
     equipment = factory.SubFactory(EquipmentFactory)
     status = factory.Iterator(
-        [HealthStatus.Status.NORMAL, HealthStatus.Status.WARNING, HealthStatus.Status.CRITICAL]
+        [
+            HealthStatus.Status.NORMAL,
+            HealthStatus.Status.WARNING,
+            HealthStatus.Status.CRITICAL,
+        ],
     )
     anomaly_score = factory.Faker("pyfloat", min_value=-0.5, max_value=1.5)
 

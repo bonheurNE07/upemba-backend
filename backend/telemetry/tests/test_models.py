@@ -1,6 +1,7 @@
 import pytest
 
-from backend.telemetry.models import HealthStatus, SensorReading
+from backend.telemetry.models import HealthStatus
+from backend.telemetry.models import SensorReading
 
 
 @pytest.mark.django_db

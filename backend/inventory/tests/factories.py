@@ -1,7 +1,8 @@
 import factory
 from factory.django import DjangoModelFactory
 
-from backend.inventory.models import Equipment, MaintenanceLog
+from backend.inventory.models import Equipment
+from backend.inventory.models import MaintenanceLog
 from backend.users.tests.factories import UserFactory
 
 

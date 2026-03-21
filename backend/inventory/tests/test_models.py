@@ -1,6 +1,7 @@
 import pytest
 
-from backend.inventory.models import Equipment, MaintenanceLog
+from backend.inventory.models import Equipment
+from backend.inventory.models import MaintenanceLog
 
 
 @pytest.mark.django_db

@@ -14,7 +14,9 @@ def evaluate_equipment_health_task():
 
     for eq in equipments:
         # Fetch the most recent 100 readings (ordered chronologically oldest to newest for the model)
-        recent_qs = SensorReading.objects.filter(equipment=eq).order_by("-timestamp")[:100]
+        recent_qs = SensorReading.objects.filter(equipment=eq).order_by("-timestamp")[
+            :100
+        ]
         # Query evaluation & reverse for chronological order
         recent_list = list(recent_qs.values(*detector.features, "timestamp"))[::-1]
 

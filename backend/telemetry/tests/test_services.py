@@ -10,9 +10,11 @@ from backend.users.models import User
 def test_alert_service_dispatch(user):
     user.role = User.Role.TECHNICIAN
     user.save()
-    
-    AlertService.trigger_critical_alert("Solar Inverter 1", -0.99, "2025-01-01 12:00:00")
-    
+
+    AlertService.trigger_critical_alert(
+        "Solar Inverter 1", -0.99, "2025-01-01 12:00:00",
+    )
+
     # Assert one message has been correctly sent to the Django testing outbox sandbox
     assert len(mail.outbox) == 1
     assert "Solar Inverter 1" in mail.outbox[0].subject
@@ -22,7 +24,7 @@ def test_alert_service_dispatch(user):
 def test_anomaly_detector_insufficient_data():
     detector = AnomalyDetector()
     score, is_anomaly = detector.train_and_predict([])
-    
+
     # Should safely fallback instead of throwing Math exceptions
     assert score == 1.0
     assert not is_anomaly

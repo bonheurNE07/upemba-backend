@@ -41,17 +41,23 @@ class AlertService:
         from backend.users.models import User
 
         # Fetch explicitly authorized personnel
-        recipients = User.objects.filter(
-            role__in=[User.Role.ADMIN, User.Role.TECHNICIAN],
-            is_active=True,
-            email__isnull=False,
-        ).exclude(email="").values_list("email", flat=True)
+        recipients = (
+            User.objects.filter(
+                role__in=[User.Role.ADMIN, User.Role.TECHNICIAN],
+                is_active=True,
+                email__isnull=False,
+            )
+            .exclude(email="")
+            .values_list("email", flat=True)
+        )
 
         recipient_list = list(recipients)
 
         # Fallback to hardcoded admins if database users aren't seeded yet
         if not recipient_list:
-            logger.warning("No Technicians/Admins found in DB. Falling back to settings.ADMINS.")
+            logger.warning(
+                "No Technicians/Admins found in DB. Falling back to settings.ADMINS.",
+            )
             recipient_list = [admin[1] for admin in settings.ADMINS]
             if not recipient_list:
                 logger.warning("No recipients available for critical alerts.")
@@ -66,6 +72,8 @@ class AlertService:
                 html_message=html_message,
                 fail_silently=False,
             )
-            logger.info(f"Critical HTML alert email successfully dispatched to {recipient_list}")
+            logger.info(
+                f"Critical HTML alert email successfully dispatched to {recipient_list}",
+            )
         except Exception as e:
             logger.exception(f"Failed to send critical HTML alert email: {e}")
