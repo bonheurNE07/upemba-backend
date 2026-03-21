@@ -5,65 +5,36 @@ entryPoints:
   web:
     # http
     address: ':80'
-    http:
-      # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
-      redirections:
-        entryPoint:
-          to: web-secure
-
-  web-secure:
-    # https
-    address: ':443'
 
   flower:
     address: ':5555'
 
-certificatesResolvers:
-  letsencrypt:
-    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
-    acme:
-      email: 'ndeze-bonheur@upemba.local'
-      storage: /etc/traefik/acme/acme.json
-      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
-      httpChallenge:
-        entryPoint: web
-
 http:
   routers:
-    web-secure-router:
-      rule: 'Host(`upemba.local`) || Host(`www.upemba.local`)'
+    web-router:
+      rule: 'PathPrefix(`/`)'
       entryPoints:
-        - web-secure
+        - web
       middlewares:
         - csrf
       service: django
-      tls:
-        # https://doc.traefik.io/traefik/routing/routers/#certresolver
-        certResolver: letsencrypt
 
-    flower-secure-router:
-      rule: 'Host(`upemba.local`)'
+    flower-router:
+      rule: 'PathPrefix(`/`)'
       entryPoints:
         - flower
       service: flower
-      tls:
-        # https://doc.traefik.io/traefik/master/routing/routers/#certresolver
-        certResolver: letsencrypt
 
     web-media-router:
-      rule: '(Host(`upemba.local`) || Host(`www.upemba.local`)) && PathPrefix(`/media/`)'
+      rule: 'PathPrefix(`/media/`)'
       entryPoints:
-        - web-secure
+        - web
       middlewares:
         - csrf
       service: django-media
-      tls:
-        certResolver: letsencrypt
 
   middlewares:
     csrf:
-      # https://doc.traefik.io/traefik/master/middlewares/http/headers/#hostsproxyheaders
-      # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
       headers:
         hostsProxyHeaders: ['X-CSRFToken']
 
@@ -84,7 +55,6 @@ http:
           - url: http://nginx:80
 
 providers:
-  # https://doc.traefik.io/traefik/master/providers/file/
   file:
     filename: /etc/traefik/traefik.yml
     watch: true
