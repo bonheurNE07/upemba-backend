@@ -18,23 +18,26 @@ class AnomalyDetector:
         self.n_estimators = n_estimators
         self.features = ["temperature", "voltage", "vib_x", "vib_y", "vib_z"]
 
-    def train_and_predict(self, readings_qs):
+    def train_and_predict(self, records_list):
         """
-        Takes a chronological Django QuerySet of recent SensorReadings,
-        dynamically trains the Isolation Forest on the rolling window data, 
+        Takes a chronological list of dictionaries containing recent SensorReadings,
+        dynamically trains the Isolation Forest on the rolling window data,
         and returns the anomaly prediction strictly for the most recent reading.
-        
+
         Returns:
             anomaly_score (float): The IsolationForest decision_function score
             is_anomaly (bool): True if an anomaly is detected (-1 prediction)
         """
-        if readings_qs.count() < 10:
-            logger.warning("Not enough data points to train Isolation Forest securely. Skipping.")
+        if len(records_list) < 10:
+            logger.warning(
+                "Not enough data points to train Isolation Forest securely. Skipping."
+            )
             # Default to normal prediction (1.0) if we don't have enough operational history
             return 1.0, False
 
         # Extract only the necessary telemetry features into a Pandas DataFrame
-        df = pd.DataFrame.from_records(readings_qs.values(*self.features))
+        # The list items should already contain the dict keys defined in self.features
+        df = pd.DataFrame.from_records(records_list)[self.features]
 
         # Initialize the Unsupervised ML model
         model = IsolationForest(
@@ -54,6 +57,6 @@ class AnomalyDetector:
         # Get raw anomaly score (negative is anomalous, positive is normal)
         score = model.decision_function(latest_reading)[0]
 
-        is_anomaly = True if prediction == -1 else False
+        is_anomaly = prediction == -1
 
         return float(score), is_anomaly
