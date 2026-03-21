@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from backend.telemetry.models import HealthStatus, SensorReading
+from backend.telemetry.models import HealthStatus
+from backend.telemetry.models import SensorReading
 
 
 class HealthStatusSerializer(serializers.ModelSerializer):
