@@ -67,5 +67,8 @@ COPY ./compose/local/django/celery/flower/start /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
 
+COPY ./compose/local/django/start-mqtt /start-mqtt
+RUN sed -i 's/\r$//g' /start-mqtt
+RUN chmod +x /start-mqtt
 
 ENTRYPOINT ["/entrypoint"]
