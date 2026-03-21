@@ -45,3 +45,8 @@
 - [ ] **Issue 3.3: GitHub Actions CI Pipeline**
   - **Details:** Add a `.github/workflows/ci.yml` that runs `ruff` linting and `pytest` on every PR.
   
+### Milestone 4: User Authentication & Role-Based Access
+**Goal:** Implement strict access control for the dashboards and ensure alerts are routed correctly based on user roles.
+
+- [ ] **Issue 4.1: User Integration & Role-Based Alerting**
+  - **Details:** Implement user roles (e.g., `Technician`, `Admin`, `Ranger`) by extending the custom Django `User` model. Then, update the `AlertService` to dynamically query the database and route critical hardware telemetry alerts strictly to users assigned the `Technician` or `Admin` roles instead of hard-coded settings.
