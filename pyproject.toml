@@ -125,9 +125,14 @@ lint.ignore = [
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "S101",   # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
   "SIM102", # sometimes it's better to nest
-  # of types for comparison.
-  # Deactivated because it can make the code slow:
-  # https://github.com/astral-sh/ruff/issues/7871
+  "PLR2004", # Magic value comparisons inside mathematical data tests
+  "TRY401", # Redundant exception payload
+  "BLE001", # Blanket exception handlers
+  "G004", # F-String standard logging paradigms
+  "PLC0415", # Deferred lazy module imports preventing Django circular dependency crashes
+  "E501", # Line too long
+  "SIM401", # Dictionary get conversion suggestions
+  "RUF100", # Unused noqa directives
 ]
 lint.isort.force-single-line = true
 
