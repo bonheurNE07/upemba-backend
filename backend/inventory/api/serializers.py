@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from backend.inventory.models import Equipment, MaintenanceLog
+from backend.inventory.models import Equipment
+from backend.inventory.models import MaintenanceLog
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
