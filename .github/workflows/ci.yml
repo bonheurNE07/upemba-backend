@@ -58,6 +58,11 @@ jobs:
       - name: Build Django Application
         run: docker compose -f docker-compose.local.yml build django
 
+      - name: Warmup Background Databases
+        run: |
+          docker compose -f docker-compose.local.yml up -d postgres redis
+          sleep 15
+
       - name: Run PostgreSQL Database Migrations
         run: docker compose -f docker-compose.local.yml run --rm django python manage.py migrate
 
