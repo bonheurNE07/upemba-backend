@@ -133,6 +133,7 @@ lint.ignore = [
   "E501", # Line too long
   "SIM401", # Dictionary get conversion suggestions
   "RUF100", # Unused noqa directives
+  "COM812", # Trailing comma checks conflict with Ruff auto-formatter
 ]
 lint.isort.force-single-line = true
 

@@ -12,7 +12,9 @@ def test_alert_service_dispatch(user):
     user.save()
 
     AlertService.trigger_critical_alert(
-        "Solar Inverter 1", -0.99, "2025-01-01 12:00:00",
+        "Solar Inverter 1",
+        -0.99,
+        "2025-01-01 12:00:00",
     )
 
     # Assert one message has been correctly sent to the Django testing outbox sandbox
