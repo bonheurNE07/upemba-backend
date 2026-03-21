@@ -1,8 +1,10 @@
 from rest_framework import viewsets
 
-from backend.inventory.models import Equipment, MaintenanceLog
+from backend.inventory.models import Equipment
+from backend.inventory.models import MaintenanceLog
 
-from .serializers import EquipmentSerializer, MaintenanceLogSerializer
+from .serializers import EquipmentSerializer
+from .serializers import MaintenanceLogSerializer
 
 
 class EquipmentViewSet(viewsets.ModelViewSet):
