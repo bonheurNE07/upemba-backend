@@ -19,5 +19,5 @@ class MaintenanceLogViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Automatically set the author to the logged-in user if available
         serializer.save(
-            author=self.request.user if self.request.user.is_authenticated else None
+            author=self.request.user if self.request.user.is_authenticated else None,
         )

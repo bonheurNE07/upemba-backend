@@ -60,8 +60,8 @@ class Command(BaseCommand):
             # Use basic print since the command loops forever natively
             self.stdout.write(
                 self.style.SUCCESS(
-                    f"Saved reading for {device_id}: Temp {temp}, Volt {volt}"
-                )
+                    f"Saved reading for {device_id}: Temp {temp}, Volt {volt}",
+                ),
             )
 
         except json.JSONDecodeError:

@@ -30,7 +30,7 @@ class AnomalyDetector:
         """
         if len(records_list) < 10:
             logger.warning(
-                "Not enough data points to train Isolation Forest securely. Skipping."
+                "Not enough data points to train Isolation Forest securely. Skipping.",
             )
             # Default to normal prediction (1.0) if we don't have enough operational history
             return 1.0, False
