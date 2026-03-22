@@ -365,4 +365,4 @@ SPECTACULAR_SETTINGS = {
 # MQTT Configuration
 MQTT_BROKER_HOST = env("MQTT_BROKER_HOST", default="mosquitto")
 MQTT_BROKER_PORT = env.int("MQTT_BROKER_PORT", default=1883)
-MQTT_TELEMETRY_TOPIC = env("MQTT_TELEMETRY_TOPIC", default="upemba/telemetry")
+MQTT_TELEMETRY_TOPIC = env("MQTT_TELEMETRY_TOPIC", default="upemba/sensors/+/telemetry")
