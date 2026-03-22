@@ -1,81 +1,75 @@
-# Upemba IoT Backend
+# Upemba IoT Diagnostics Backend 🔋🌍
+[![CI Pipeline](https://github.com/bonheurNE07/upemba-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/bonheurNE07/upemba-backend/actions)
+[![CD Pipeline](https://github.com/bonheurNE07/upemba-backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/bonheurNE07/upemba-backend/actions)
+[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django)
+[![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-IoT Predictive Maintenance System for Upemba National Park
+A high-performance, edge-deployed IoT aggregation engine designed to securely ingest telemetry from ESP32 microcontrollers, perform real-time **Scikit-Learn Machine Learning** predictive maintenance, and alert technicians of critical hardware anomalies natively across local intranet ecosystems.
 
-[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+---
 
-License: MIT
+## ⚡ Architecture & Tech Stack
 
-## Settings
+- **Core Web Framework**: Django 5.x + Django Rest Framework (DRF)
+- **IoT Payload Ingestion**: Eclipse Mosquitto (MQTT) & Paho-MQTT Python Daemon
+- **Artificial Intelligence**: `scikit-learn` Isolation Forest (Unsupervised Anomaly Detection)
+- **Asynchronous Task Queue**: Celery & Redis
+- **Database Engine**: PostgreSQL 16
+- **Reverse Proxy**: Traefik (Optimized for Edge IP Routing)
+- **Container Orchestration**: Docker & Docker Compose
+- **Continuous Integration**: GitHub Actions (Linting, Pytest, Automatic Edge Deployment)
 
-Moved to [settings](https://cookiecutter-django.readthedocs.io/en/latest/1-getting-started/settings.html).
+## 📡 Hardware Integration (ESP32 / Microcontrollers)
+This backend expects IoT edge devices to transmit JSON payloads matching strict PostgreSQL mappings.
 
-## Basic Commands
+### Mosquitto Routing
+Devices should publish payloads natively every **30 seconds** structurally avoiding database overflow.
+`Topic`: `upemba/sensors/<DEVICE_MAC_OR_ID>/telemetry`
 
-### Setting Up Your Users
-
-- To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
-- To create a **superuser account**, use this command:
-
-      uv run python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-### Type checks
-
-Running type checks with mypy:
-
-    uv run mypy backend
-
-### Test coverage
-
-To run the tests, check your test coverage, and generate an HTML coverage report:
-
-    uv run coverage run -m pytest
-    uv run coverage html
-    uv run open htmlcov/index.html
-
-#### Running tests with pytest
-
-    uv run pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally.html#using-webpack-or-gulp).
-
-### Celery
-
-This app comes with Celery.
-
-To run a celery worker:
-
-```bash
-cd backend
-uv run celery -A config.celery_app worker -l info
+### Expected JSON Schema
+```json
+{
+  "device_id": "EQUIP-INV-001",
+  "data": {
+    "temp": 27.81,
+    "volt": 8.94,
+    "vib": {
+      "x": -0.39,
+      "y": -0.32,
+      "z": 0.63
+    }
+  }
+}
 ```
 
-Please note: For Celery's import magic to work, it is important _where_ the celery commands are run. If you are in the same folder with _manage.py_, you should be right.
+## 🧠 Machine Learning: Predictive Maintenance
 
-To run [periodic tasks](https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html), you'll need to start the celery beat scheduler service. You can start it as a standalone process:
+Upemba executes predictive analytics natively using the `IsolationForest` algorithm. A persistent `celerybeat` process scrapes the historical database every minute, fetching exactly the last 100 observations per device to generate an `anomaly_score`.
 
+- **NORMAL**: Hardware behaves inside established historical constraints.
+- **WARNING**: Hardware trends deviate beyond classical variances.
+- **CRITICAL**: Immediate voltage/vibration failure detected. Automatically spawns instant SMTP alert notifications to all users registered with the `TECHNICIAN` role.
+
+---
+
+## 🚀 Edge Deployment (Raspberry Pi CI/CD)
+
+This repository is built for **100% Autonomous Local Delivery**. Whenever code is pushed to the `main` branch, the GitHub Actions cloud runner establishes a direct communication bridge to the localized Edge Node (Raspberry Pi). 
+
+If the Ruff linters and Pytest cases pass 100%, the runner natively pulls the code onto the Raspberry Pi, safely injects the local `.envs` variables from the sandbox, and recompiles the Docker infrastructure over Traefik natively bridging `192.168.1.x` networks.
+
+### Manual Fallback Deployment
+If the global internet goes down, developers can mathematically bypass CI/CD by utilizing the `deploy.sh` script which directly establishes an SSH RSYNC tunnel natively from laptop to Pi:
 ```bash
-cd backend
-uv run celery -A config.celery_app beat
+./deploy.sh
 ```
 
-or you can embed the beat service inside a worker with the `-B` option (not recommended for production use):
+## 📚 Deep Codebase Documentation
+For engineering teams extending the codebase, hyper-detailed markdown manuals predicting architectural flows exist natively embedded exactly alongside the code in the respective folders:
 
-```bash
-cd backend
-uv run celery -A config.celery_app worker -B -l info
-```
+- `backend/telemetry/documentation/`
+- `backend/inventory/documentation/`
+- `backend/users/documentation/`
+- `config/documentation/`
 
-## Deployment
-
-The following details how to deploy this application.
-
-### Docker
-
-See detailed [cookiecutter-django Docker documentation](https://cookiecutter-django.readthedocs.io/en/latest/3-deployment/deployment-with-docker.html).
+Additionally, an enterprise-grade HTML Sphinx website can be instantly generated graphically by executing `make html` inside the `docs/` repository!
