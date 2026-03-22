@@ -12,6 +12,10 @@ Welcome to Upemba IoT Backend's documentation!
 
    howto
    users
+   hardware_integration
+   telemetry_pipeline
+   machine_learning
+   deployment_architecture
 
 
 
