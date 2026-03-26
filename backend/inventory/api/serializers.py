@@ -34,4 +34,4 @@ class MaintenanceLogSerializer(serializers.ModelSerializer):
             "action_taken",
             "timestamp",
         ]
-        read_only_fields = ["id", "timestamp", "author_name"]
+        read_only_fields = ["id", "timestamp", "author_name", "author"]

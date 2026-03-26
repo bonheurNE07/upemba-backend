@@ -10,7 +10,7 @@ A high-performance, edge-deployed IoT aggregation engine designed to securely in
 
 ## ⚡ Architecture & Tech Stack
 
-- **Core Web Framework**: Django 6.x + Django Rest Framework (DRF)
+- **Core Web Framework**: Django 5.x + Django Rest Framework (DRF)
 - **IoT Payload Ingestion**: Eclipse Mosquitto (MQTT) & Paho-MQTT Python Daemon
 - **Artificial Intelligence**: `scikit-learn` Isolation Forest (Unsupervised Anomaly Detection)
 - **Asynchronous Task Queue**: Celery & Redis
@@ -23,7 +23,7 @@ A high-performance, edge-deployed IoT aggregation engine designed to securely in
 This backend expects IoT edge devices to transmit JSON payloads matching strict PostgreSQL mappings.
 
 ### Mosquitto Routing
-Devices should publish payloads natively every **300 seconds** structurally avoiding database overflow.
+Devices should publish payloads natively every **30 seconds** structurally avoiding database overflow.
 `Topic`: `upemba/sensors/<DEVICE_MAC_OR_ID>/telemetry`
 
 ### Expected JSON Schema
@@ -59,7 +59,7 @@ This repository is built for **100% Autonomous Local Delivery**. Whenever code i
 If the Ruff linters and Pytest cases pass 100%, the runner natively pulls the code onto the Raspberry Pi, safely injects the local `.envs` variables from the sandbox, and recompiles the Docker infrastructure over Traefik natively bridging `192.168.1.x` networks.
 
 ### Manual Fallback Deployment
-If the global internet goes down, developers can mathematically bypass CI/CD by utilizing the `deploy.sh` script which directly establishes an SSH RSYNC tunnel natively from host to Pi:
+If the global internet goes down, developers can mathematically bypass CI/CD by utilizing the `deploy.sh` script which directly establishes an SSH RSYNC tunnel natively from laptop to Pi:
 ```bash
 ./deploy.sh
 ```

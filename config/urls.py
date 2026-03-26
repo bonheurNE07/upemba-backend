@@ -27,12 +27,17 @@ urlpatterns = [
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
 
+from backend.users.api.views import RegisterView, ActivateUserView, ResendOTPView
+
 # API URLS
 urlpatterns += [
     # API base url
     path("api/", include("config.api_router")),
     # DRF auth token
     path("api/auth-token/", obtain_auth_token, name="obtain_auth_token"),
+    path("api/register/", RegisterView.as_view(), name="api_register"),
+    path("api/activate/", ActivateUserView.as_view(), name="api_activate"),
+    path("api/resend-otp/", ResendOTPView.as_view(), name="api_resend_otp"),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
         "api/docs/",

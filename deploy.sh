@@ -2,7 +2,7 @@
 # Backup Local Deployment Script for Upemba Edge Server
 
 PI_USER="admin"
-PI_IP="192.168.1.71"
+PI_IP="192.168.1.72"
 DEST_DIR="~/upemba-backend"
 
 echo "Deploying Upemba Backend to Raspberry Pi ($PI_IP)..."

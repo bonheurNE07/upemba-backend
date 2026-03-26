@@ -2,6 +2,7 @@ import logging
 
 import pandas as pd
 from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,19 @@ class AnomalyDetector:
             return 1.0, False
 
         # Extract only the necessary telemetry features into a Pandas DataFrame
-        # The list items should already contain the dict keys defined in self.features
         df = pd.DataFrame.from_records(records_list)[self.features]
+
+        # 1. Data Ingestion & Preprocessing: Interpolation
+        # Handle network dropouts by interpolating missing values in the rolling window
+        df.interpolate(method="linear", limit_direction="both", inplace=True)
+        # Fallback for remaining NaNs (e.g., if interpolation couldn't fill everything)
+        df.fillna(method="ffill", inplace=True)
+        df.fillna(method="bfill", inplace=True)
+
+        # 2. Data Ingestion & Preprocessing: Normalization
+        # Use StandardScaler to ensure all features are evaluated on a uniform mathematical scale
+        scaler = StandardScaler()
+        df_scaled = pd.DataFrame(scaler.fit_transform(df), columns=self.features)
 
         # Initialize the Unsupervised ML model
         model = IsolationForest(
@@ -47,10 +59,10 @@ class AnomalyDetector:
         )
 
         # Fit the model on the entire rolling window to learn the "normal" vibration/thermal profiles
-        model.fit(df)
+        model.fit(df_scaled)
 
         # Isolate the latest dataset row to evaluate current health
-        latest_reading = df.iloc[[-1]]
+        latest_reading = df_scaled.iloc[[-1]]
 
         # Predict: 1 for normal, -1 for anomaly
         prediction = model.predict(latest_reading)[0]

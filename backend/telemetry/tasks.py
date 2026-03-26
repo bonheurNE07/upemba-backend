@@ -10,17 +10,17 @@ from backend.telemetry.services.ml_service import AnomalyDetector
 @shared_task(name="evaluate_equipment_health_task")
 def evaluate_equipment_health_task():
     equipments = Equipment.objects.filter(is_active=True)
-    detector = AnomalyDetector(contamination=0.05, n_estimators=100)
+    detector = AnomalyDetector(contamination=0.05, n_estimators=15)
 
     for eq in equipments:
         # Fetch the most recent 100 readings (ordered chronologically oldest to newest for the model)
         recent_qs = SensorReading.objects.filter(equipment=eq).order_by("-timestamp")[
-            :100
+            :40
         ]
         # Query evaluation & reverse for chronological order
         recent_list = list(recent_qs.values(*detector.features, "timestamp"))[::-1]
 
-        if len(recent_list) < 10:
+        if len(recent_list) < 40:
             # We don't have enough data to make an ML prediction yet
             continue
 
