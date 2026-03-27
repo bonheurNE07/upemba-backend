@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout Code Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Load Production Secrets into Action Workspace
         run: cp -r ~/upemba-backend/.envs ./
